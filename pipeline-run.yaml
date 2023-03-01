@@ -20,9 +20,13 @@ spec:
   - name: git-credentials
     secret:
       secretName: git-credentials
+
+  - name: docker-credentials
+    secret:
+      secretName: docker-credentials
   params:
   - name: repo-url
     value: git@bitbucket.org:varunsonavni8487/demo-pipeline.git
   
   - name: branch-name
-    value: dev
+    value: main

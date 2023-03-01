@@ -19,6 +19,9 @@ spec:
       next task.
   - name: git-credentials
     description: My ssh credentials
+  - name: docker-credentials
+    description: docker-credentials
+    
   tasks:
   - name: fetch-source
     taskRef:
@@ -34,7 +37,6 @@ spec:
     - name: revision
       value: $(params.branch-name)
 
-
   - name: show-readme
     runAfter: ["fetch-source"]
     taskRef:
@@ -42,3 +44,33 @@ spec:
     workspaces:
     - name: source
       workspace: shared-data
+
+
+  - name: kaniko
+    runAfter: ["fetch-source"]
+    taskRef:
+      name: kaniko
+    workspaces:
+    - name: source
+      workspace: shared-data
+    - name: dockerconfig
+      workspace: docker-credentials
+
+    params:
+      - name: IMAGE
+        value: 970355526286.dkr.ecr.us-east-1.amazonaws.com/go:latest
+      - name: DOCKERFILE
+        value: ./Dockerfile
+      - name: CONTEXT
+        value: ./    
+
+  # - name: golang-build
+  #   runAfter: ["fetch-source", "show-readme"]
+  #   taskRef:
+  #     name: golang-build
+  #   workspaces:
+  #   - name: source
+  #     workspace: shared-data
+  #   params:
+  #   - name: package
+  #     value: ./workspace
